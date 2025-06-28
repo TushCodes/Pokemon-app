@@ -1,60 +1,47 @@
 const pokemonBtn = document.getElementById("generate-btn");
 const clearBtn = document.getElementById("clear-data");
 const name = document.getElementById("pokemon-name");
-const planet = document.getElementById("pokemon-planet");
-const movies = document.getElementById("pokemon-movies");
+const types = document.getElementById("pokemon-types");
 const loader = document.getElementById("loader");
 const infoHeader = document.querySelector(".info-header");
 
-pokemonBtn.addEventListener('click', (event) => {
+pokemonBtn.addEventListener('click', () => {
     // reset UI
     loader.style.display = 'block';
     infoHeader.style.display = 'none';
-    movies.style.display = 'none';
     name.innerText = '';
-    planet.innerText = '';
-    movies.innerHTML = '';
-    let randNum = Math.ceil(Math.random() * 83);
-    fetch(`https://swapi.dev/api/people/${randNum}/`)
-    .then(response => response.json())
-    .then(data => {
-        // hide loader and show header
+    const imageEl = document.getElementById('pokemon-image');
+    imageEl.src = '';
+    types.innerText = '';
+
+    const maxPokemon = 898;
+    const randId = Math.floor(Math.random() * maxPokemon) + 1;
+    fetch(`https://pokeapi.co/api/v2/pokemon/${randId}`)
+      .then(res => res.json())
+      .then(data => {
         loader.style.display = 'none';
         infoHeader.style.display = 'block';
-
-        //name
-        name.innerText = data['name'];
-        console.log(randNum);
-
-        //planet
-        fetch(data['homeworld'])
-            .then(response=>response.json())
-            .then((data) => {
-                planet.innerText = data['name'];
-            });
-        
-        //movies
-        const movieList = data['films'];
-        movies.style.display = 'block';
-        movies.innerHTML = '';
-        for(let i=0; i<movieList.length; i++) {
-            fetch(movieList[i])
-                .then(response=>response.json())
-                .then((film) => {
-                    let span = document.createElement('span');
-                    span.innerText = film['title']+(i===movieList.length-1 ? '. ' : ', ');
-                    movies.appendChild(span);
-                });
-        }
-        
-    })
+        // Name
+        const formattedName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+        name.innerText = formattedName;
+        // Image
+        imageEl.src = data.sprites.front_default;
+        imageEl.alt = formattedName;
+        // Types
+        const typeNames = data.types.map(t => t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1));
+        types.innerText = 'Type: ' + typeNames.join(', ');
+      })
+      .catch(err => {
+        loader.style.display = 'none';
+        alert('Failed to fetch Pokémon data.');
+        console.error(err);
+      });
 });
 
 clearBtn.addEventListener('click', () => {
-    name.innerText = '';
-    planet.innerText = '';
-    movies.innerText = '';
-    infoHeader.style.display = 'none';
-    movies.style.display = 'none';
     loader.style.display = 'none';
+    infoHeader.style.display = 'none';
+    name.innerText = '';
+    document.getElementById('pokemon-image').src = '';
+    types.innerText = '';
 });

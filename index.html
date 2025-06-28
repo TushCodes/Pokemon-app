@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Pokémon Generator</title>
+    <meta name="description" content="A random Pokémon generator using the PokéAPI.">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="favicon.ico">
@@ -15,10 +16,10 @@
         <button id="clear-data">Clear Data</button>
         <div id="loader" class="loader"></div>
         <div id="pokemon-info">
-            <h1 class="info-header">Your Pokémon info is as follows:</h1>
+            <h1 class="info-header">Here’s your Pokémon:</h1>
             <h2 id="pokemon-name"></h2>
-            <p id="pokemon-planet"></p>
-            <p id="pokemon-movies" class="movies-list">The movies are:</p>
+            <img id="pokemon-image" class="pokemon-img" alt="Pokémon sprite">
+            <p id="pokemon-types" class="pokemon-types"></p>
         </div>
     </div>
     <script src="script.js"></script>
